@@ -10,7 +10,7 @@ export const signup = async (req: Request, res: Response) => {
         const existingUser = await UserModel.findOne({ email });
 
         if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
+            return res.status(409).json({ message: "User already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -36,13 +36,13 @@ export const login = async (req: Request, res: Response) => {
         const user = await UserModel.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
         const passMatch = await bcrypt.compare(password, user.password);
 
         if (!passMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
         // if jwt secret is missing
@@ -73,12 +73,12 @@ export const login = async (req: Request, res: Response) => {
 // page refresh, app reload, token is in local storage
 export const me = async (req: Request, res: Response) => {
     try {
-        //req.user will come from middleware
-        const user = await UserModel.findById((req as any).user.userId).select("-password");
+        // req.userId will come from middleware
+        const user = await UserModel.findById((req as any).userId).select("-password");
 
         // user deleted but token exists or logout from all devices functionality
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(401).json({ message: "User not found" });
         }
 
         res.json(user);
