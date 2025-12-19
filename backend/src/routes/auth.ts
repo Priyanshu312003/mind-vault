@@ -1,12 +1,15 @@
 import { Router } from "express";
-import { Request, Response } from "express";
+import { authMiddleware } from "../middleware/auth";
+import { login, me, signup } from "../controllers/auth";
 
 const router = Router();
 
-router.post("/signup", (req: Request, res: Response) => { });
+// Public routes
+router.post("/signup", signup);
 
-router.post("/login", (req: Request, res: Response) => { });
+router.post("/login", login);
 
-router.get("/me", (req: Request, res: Response) => { });
+// Protected routes
+router.get("/me", authMiddleware, me);
 
 export default router;
