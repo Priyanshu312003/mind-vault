@@ -33,7 +33,7 @@ export const login = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
 
-        const user = await UserModel.findOne({ email });
+        const user = await UserModel.findOne({ email }).select("+password");
 
         if (!user) {
             return res.status(401).json({ message: "Invalid email or password" });
