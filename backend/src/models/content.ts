@@ -16,7 +16,7 @@ const contentSchema = new Schema<IContent>({
     title: { type: String, required: true, trim: true },
     link: { type: String, trim: true },
     description: { type: String, trim: true },
-    tags: [{ type: Schema.Types.ObjectId, ref: "Tag" }],
+    tags: { type: [{ type: Schema.Types.ObjectId, ref: "Tag" }], required: true },
     embedding: { type: [Number], default: undefined },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
 },
