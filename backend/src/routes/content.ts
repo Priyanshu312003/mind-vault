@@ -1,14 +1,15 @@
 import { Router } from "express";
-import { Request, Response } from "express";
+import { authMiddleware } from "../middleware/auth";
+import { createContent, getAllContent, getSingleContent, deleteContent } from "../controllers/content";
 
-const router = Router();
+const contentRouter = Router();
 
-router.post("/", (req: Request, res: Response) => { });
+contentRouter.post("/", authMiddleware, createContent);
 
-router.get("/", (req: Request, res: Response) => { });
+contentRouter.get("/", authMiddleware, getAllContent);
 
-router.get("/:id", (req: Request, res: Response) => { });
+contentRouter.get("/:id", authMiddleware, getSingleContent);
 
-router.delete("/:id", (req: Request, res: Response) => { });
+contentRouter.delete("/:id", authMiddleware, deleteContent);
 
-export default router;
+export default contentRouter;
