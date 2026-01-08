@@ -1,8 +1,3 @@
-Got it. For now, keep it **small, honest, and clean**.
-Here’s a **minimal README** that’s perfect for an in-progress GitHub repo.
-
----
-
 # MindVault
 
 MindVault is a backend-first **second brain application** for saving, organizing, and sharing knowledge.
