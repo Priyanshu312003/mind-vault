@@ -114,3 +114,60 @@ export const deleteContent = async (req: Request, res: Response) => {
         return res.status(500).json({ message: err.message || "Failed to delete content" });
     }
 };
+
+/**
+ * UPDATE CONTENT
+ * PUT /content/:id
+ */
+export const updateContent = async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).userId;
+        const id = req.params.id;
+
+        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid content id" });
+        }
+
+        const content = await ContentModel.findById(id);
+
+        if (!content) {
+            return res.status(404).json({ message: "Content not found" });
+        }
+
+        if (content.userId.toString() !== userId) {
+            return res.status(403).json({ message: "Access denied" });
+        }
+
+        if (req.body.title !== undefined) {
+            content.title = req.body.title;
+        }
+
+        if (req.body.link !== undefined) {
+            content.link = req.body.link;
+        }
+
+        if (req.body.description !== undefined) {
+            content.description = req.body.description;
+        }
+
+        if (req.body.tags !== undefined) {
+            content.tags = req.body.tags;
+        }
+
+        // Final state Validation
+        if (!content.link && !content.description) {
+            return res.status(400).json({ message: "Either Link or Description is required" });
+        }
+
+        if (!Array.isArray(content.tags) || content.tags.length === 0) {
+            return res.status(400).json({ message: "Atleast one tag is required" });
+        }
+
+        await content.save();
+
+        return res.status(200).json(content);
+    }
+    catch (err: any) {
+        return res.status(500).json({ message: err.message || "Failed to update content" })
+    }
+}
