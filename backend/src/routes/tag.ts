@@ -1,10 +1,14 @@
 import { Router } from "express";
 import { Request, Response } from "express";
+import { authMiddleware } from "../middleware/auth";
+import { createTag, deleteTag, getTags } from "../controllers/tag";
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response) => { });
+router.post("/", authMiddleware, createTag);
 
-router.post("/", (req: Request, res: Response) => { });
+router.get("/", authMiddleware, getTags);
+
+router.delete("/:id", authMiddleware, deleteTag);
 
 export default router;
