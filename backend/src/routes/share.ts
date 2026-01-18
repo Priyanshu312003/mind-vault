@@ -1,14 +1,20 @@
 import { Router } from "express";
-import { Request, Response } from "express";
+import { authMiddleware } from "../middleware/auth";
+import {
+  createShare,
+  resolveShare,
+  revokeShare,
+} from "../controllers/share";
 
 const router = Router();
 
-router.post("/brain", (req: Request, res: Response) => { });
+// Create or regenerate a share link
+router.post("/", authMiddleware, createShare);
 
-router.get("/brain/:id", (req: Request, res: Response) => { });
+// Resolve a share link (PUBLIC)
+router.get("/:token", resolveShare);
 
-router.post("/item/:id", (req: Request, res: Response) => { });
-
-router.get("/item/:id", (req: Request, res: Response) => { });
+// Revoke a share link
+router.delete("/:id", authMiddleware, revokeShare);
 
 export default router;
