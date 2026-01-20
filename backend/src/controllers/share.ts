@@ -70,4 +70,65 @@ export const createShare = async (req: Request, res: Response) => {
     catch (err) {
         return res.status(500).json({ message: "Failed to create share" });
     }
-}
+};
+
+/**
+ * GET /share/:token
+ * Resolve a share link
+*/
+export const resolveShare = async (req: Request, res: Response) => {
+    try {
+        const { token } = req.params;
+
+        if (!token) {
+            return res.status(400).json({ message: "Share token is required" });
+        }
+
+        const share = await ShareModel.findOne({ shareToken: token });
+
+        if (!share) {
+            return res.status(404).json({ message: "Invalid or expired share link" });
+        }
+
+        //ITEM level share
+        if (share.targetType === "ITEM") {
+            if (!share.targetId) {
+                return res.status(400).json({ message: "Invalid shared item" });
+            }
+
+            const content = await ContentModel.findOne({
+                _id: share.targetId,
+                userId: share.ownerId,
+            });
+
+            if (!content) {
+                return res.status(404).json({ message: "Shared content not found" });
+            }
+
+            return res.status(200).json({
+                type: "ITEM",
+                access: share.access,
+                data: content,
+            });
+        }
+
+        // BRAIN level share
+        if (share.targetType === "BRAIN") {
+            const contents = await ContentModel.find({
+                userId: share.ownerId,
+            }).sort({ createdAt: -1 });
+
+            return res.status(200).json({
+                type: "BRAIN",
+                access: share.access,
+                data: contents,
+            });
+        }
+
+        return res.status(400).json({ message: "Unknown share type" });
+    }
+    catch (err) {
+        console.error("resolveShare error:", err);
+        return res.status(500).json({ message: "Failed to resolve share" });
+    }
+};
