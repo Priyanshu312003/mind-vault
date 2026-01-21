@@ -132,3 +132,35 @@ export const resolveShare = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Failed to resolve share" });
     }
 };
+
+/**
+ * DELETE /share/:id
+ * Revoke a share
+ */
+export const revokeShare = async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).userId;
+        const { id } = req.params;
+
+        if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid share id" });
+        }
+
+        const share = await ShareModel.findById(id);
+
+        if (!share) {
+            return res.status(404).json({ message: "Share not found" });
+        }
+
+        if (share.ownerId.toString() !== userId) {
+            return res.status(403).json({ message: "Unauthorized" });
+        }
+
+        await ShareModel.deleteOne({ _id: id });
+
+        return res.status(200).json({ message: "Share revoked" });
+    }
+    catch (err) {
+        return res.status(500).json({ message: "Failed to revoke share" });
+    }
+}
