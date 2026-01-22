@@ -164,3 +164,41 @@ export const revokeShare = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Failed to revoke share" });
     }
 }
+
+/**
+ * GET /share
+ * List all shares created by user
+ */
+export const listShares = async (req: Request, res: Response) => {
+    try {
+        const userId = (req as any).userId;
+
+        if (!userId) {
+            return res.status(401).json({ message: "Unauthorized" })
+        }
+
+        const shares = await ShareModel.find(
+            {
+                ownerId: userId,
+            },
+            {
+                _id: 1,
+                targetId: 1,
+                targetType: 1,
+                access: 1,
+                shareToken: 1,
+                createdAt: 1,
+            }
+        )
+            .sort({ createdAt: -1 })
+            .lean();
+
+        return res.status(200).json({
+            shares,
+        });
+    }
+    catch (err) {
+        console.error("listShares error:", err);
+        return res.status(500).json({ message: "Failed to fetch shares" });
+    }
+};

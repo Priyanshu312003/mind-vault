@@ -4,6 +4,7 @@ import {
   createShare,
   resolveShare,
   revokeShare,
+  listShares,
 } from "../controllers/share";
 
 const router = Router();
@@ -16,5 +17,8 @@ router.get("/:token", resolveShare);
 
 // Revoke a share link
 router.delete("/:id", authMiddleware, revokeShare);
+
+// List all shares
+router.get("/", authMiddleware, listShares);
 
 export default router;
