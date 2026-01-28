@@ -1,10 +1,10 @@
 import { Router } from "express";
 import { Request, Response } from "express";
 
-const router = Router();
+const billingRouter = Router();
 
-router.post("/checkout", (req: Request, res: Response) => { });
+billingRouter.post("/checkout", (req: Request, res: Response) => { });
 
-router.post("/webhook", (req: Request, res: Response) => { });
+billingRouter.post("/webhook", (req: Request, res: Response) => { });
 
-export default router;
+export default billingRouter;

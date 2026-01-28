@@ -1,12 +1,12 @@
 import { Router } from "express";
 import { Request, Response } from "express";
 
-const router = Router();
+const searchRouter = Router();
 
 // owner search with AI
-router.get("/", (req: Request, res: Response) => { });
+searchRouter.get("/", (req: Request, res: Response) => { });
 
 // shared (no AI)
-router.get("/public", (req: Request, res: Response) => { });
+searchRouter.get("/public", (req: Request, res: Response) => { });
 
-export default router;
+export default searchRouter;

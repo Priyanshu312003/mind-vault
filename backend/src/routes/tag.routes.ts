@@ -2,12 +2,12 @@ import { Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 import { createTag, deleteTag, getTags } from "../controllers/tag.controller";
 
-const router = Router();
+const tagRouter = Router();
 
-router.post("/", authMiddleware, createTag);
+tagRouter.post("/", authMiddleware, createTag);
 
-router.get("/", authMiddleware, getTags);
+tagRouter.get("/", authMiddleware, getTags);
 
-router.delete("/:id", authMiddleware, deleteTag);
+tagRouter.delete("/:id", authMiddleware, deleteTag);
 
-export default router;
+export default tagRouter;

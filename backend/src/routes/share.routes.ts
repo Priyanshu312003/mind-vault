@@ -7,18 +7,18 @@ import {
   listShares,
 } from "../controllers/share.controller";
 
-const router = Router();
+const shareRouter = Router();
 
 // Create or regenerate a share link
-router.post("/", authMiddleware, createShare);
+shareRouter.post("/", authMiddleware, createShare);
 
 // Resolve a share link (PUBLIC)
-router.get("/:token", resolveShare);
+shareRouter.get("/:token", resolveShare);
 
 // Revoke a share link
-router.delete("/:id", authMiddleware, revokeShare);
+shareRouter.delete("/:id", authMiddleware, revokeShare);
 
 // List all shares
-router.get("/", authMiddleware, listShares);
+shareRouter.get("/", authMiddleware, listShares);
 
-export default router;
+export default shareRouter;
