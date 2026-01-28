@@ -5,7 +5,7 @@ import {
   resolveShare,
   revokeShare,
   listShares,
-} from "../controllers/share";
+} from "../controllers/share.controller";
 
 const router = Router();
 

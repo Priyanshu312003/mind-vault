@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { Request, Response } from "express";
 import { authMiddleware } from "../middleware/auth";
-import { createTag, deleteTag, getTags } from "../controllers/tag";
+import { createTag, deleteTag, getTags } from "../controllers/tag.controller";
 
 const router = Router();
 
