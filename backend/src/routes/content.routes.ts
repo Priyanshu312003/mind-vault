@@ -6,9 +6,9 @@ const contentRouter = Router();
 
 contentRouter.post("/", authMiddleware, createContent);
 
-contentRouter.get("/", authMiddleware, getAllContent);
-
-contentRouter.get("/:id", authMiddleware, getSingleContent);
+// Owner access handled inside controller
+contentRouter.get("/", getAllContent);
+contentRouter.get("/:id", getSingleContent);
 
 contentRouter.delete("/:id", authMiddleware, deleteContent);
 
