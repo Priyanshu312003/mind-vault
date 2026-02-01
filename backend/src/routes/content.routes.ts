@@ -1,14 +1,15 @@
 import { Router } from "express";
 import { authMiddleware } from "../middleware/auth";
 import { createContent, getAllContent, getSingleContent, deleteContent, updateContent } from "../controllers/content.controller";
+import { optionalAuthMiddleware } from "../middleware/optionalAuth";
 
 const contentRouter = Router();
 
 contentRouter.post("/", authMiddleware, createContent);
 
-// Owner access handled inside controller
-contentRouter.get("/", getAllContent);
-contentRouter.get("/:id", getSingleContent);
+// optional auth → owner or shared access
+contentRouter.get("/", optionalAuthMiddleware, getAllContent);
+contentRouter.get("/:id", optionalAuthMiddleware, getSingleContent);
 
 contentRouter.delete("/:id", authMiddleware, deleteContent);
 

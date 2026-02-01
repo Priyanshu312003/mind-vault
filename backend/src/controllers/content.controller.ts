@@ -37,7 +37,9 @@ export const createContent = async (req: Request, res: Response) => {
 };
 
 /**
- * GET ALL CONTENT (USER ONLY)
+ * GET ALL CONTENT
+ * Owner → returns own content
+ * Shared → returns shared content based on shareToken
  * GET /content
  */
 export const getAllContent = async (req: Request, res: Response) => {
@@ -110,6 +112,7 @@ export const getSingleContent = async (req: Request, res: Response) => {
             return res.status(404).json({ message: "Content not found" });
         }
 
+        // Owner can always access
         const isOwner = content.userId.toString() === userId;
 
         if (!isOwner) {
@@ -117,7 +120,7 @@ export const getSingleContent = async (req: Request, res: Response) => {
                 return res.status(403).json({ message: "Access denied" });
             }
 
-
+            // Validate ITEM or BRAIN share access
             const share = await ShareModel.findOne({
                 shareToken,
                 $or: [
@@ -210,7 +213,7 @@ export const updateContent = async (req: Request, res: Response) => {
             content.tags = req.body.tags;
         }
 
-        // Final state Validation
+        // Ensure content still has link or description
         if (!content.link && !content.description) {
             return res.status(400).json({ message: "Either Link or Description is required" });
         }
